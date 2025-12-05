@@ -2,7 +2,7 @@ import requests
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 ICON_URL = "https://openweathermap.org/img/wn/{icon}@2x.png"
-
+ 
 
 def get_current_weather(city: str, api_key: str, units: str = "metric") -> dict:
     """Fetch current weather for a city from OpenWeatherMap.
@@ -19,6 +19,12 @@ def get_current_weather(city: str, api_key: str, units: str = "metric") -> dict:
         r = requests.get(BASE_URL, params=params, timeout=10)
     except requests.RequestException as e:
         return {"error": f"Network error: {e}"}
+
+    # Handle common API errors with clearer messages
+    if r.status_code == 401:
+        return {"error": "Authentication failed (401). Check your OPENWEATHER_API_KEY."}
+    if r.status_code == 404:
+        return {"error": "City not found (404). Check the city name and try again."}
 
     if r.status_code != 200:
         try:
