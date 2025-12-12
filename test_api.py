@@ -3,11 +3,13 @@
 Usage:
     python test_api.py
 
-This script reads `OPENWEATHER_API_KEY` from the environment and calls `get_current_weather` for a quick smoke test.
+This script reads `OPENWEATHER_API_KEY` from the environment or .env file and calls `get_current_weather` for a quick smoke test.
 """
 import os
+from dotenv import load_dotenv
 from weather import get_current_weather
 
+load_dotenv()
 API_KEY = os.getenv('OPENWEATHER_API_KEY')
 
 if not API_KEY:
